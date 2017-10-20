@@ -149,14 +149,14 @@ public class RetanguloPalavras {
     }
 
     public static void main(String args[]) {
-        List<String> listaPalavras = lerPalavras(
-                "words_alpha.txt");
-
+    	System.out.print("Lendo arquivo...");
+        List<String> listaPalavras = lerPalavras("D:/Dropbox/TEP/wordsptbr.txt");
+        System.out.println("Terminado!");
         int k = 6;
 
         RetanguloPalavras solver = new RetanguloPalavras(listaPalavras);
 
-        System.out.println("Comecei!");
+        System.out.println("Procurando solução...");
         long start = System.currentTimeMillis();
         List<String> resultado = solver.encontraRetangulo(k);
         long elapsed = System.currentTimeMillis() - start;
@@ -166,8 +166,8 @@ public class RetanguloPalavras {
                 System.out.println(palavra);
             }
         } else {
-            System.out.println("Nao encontrei");
+            System.out.println("Sem solução.");
         }
-        System.out.println("Elapsed time = " + elapsed);
+        System.out.println("Tempo da busca: " + elapsed + "ms");
     }
 }
