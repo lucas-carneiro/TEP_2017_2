@@ -54,13 +54,13 @@ public class Trie {
         private final Character caracter;
         boolean terminal;
         HashSet<Integer> tamanhosPrefixo;
-        HashMap<Character, TrieNode> filhos;
+        TrieNode[] filhos;
 
         TrieNode(Character caracter) {
             this.caracter = caracter;
             this.terminal = false;
             this.tamanhosPrefixo = new HashSet<Integer>();
-            this.filhos = new HashMap<>();
+            this.filhos = new TrieNode[26];
         }
 
         public Character getCaracter() {
@@ -76,12 +76,14 @@ public class Trie {
         }
 
         public TrieNode getFilho(char caracter) {
-            return this.filhos.get(caracter);
+        	// 10 = valor numerico para A em Java
+        	// Diminuindo o valor de A do caractere atual para indexar por 0
+            return this.filhos[Character.getNumericValue(caracter) - 10];
         }
 
         public TrieNode addFilho(char caracter) {
             TrieNode filhoNode = new TrieNode(caracter);
-            this.filhos.put(caracter, filhoNode);
+            this.filhos[Character.getNumericValue(caracter) - 10] = filhoNode;
             return filhoNode;
         }
     }

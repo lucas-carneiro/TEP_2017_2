@@ -120,9 +120,9 @@ public class RetanguloPalavras {
 
     public static void main(String args[]) {
     	System.out.print("Lendo arquivo...");
-        List<String> listaPalavras = lerPalavras("D:/Dropbox/TEP/wordsptbr.txt");
+        List<String> listaPalavras = lerPalavras("D:/Dropbox/TEP/words.txt");
         System.out.println("Terminado!");
-        int k = 7;
+        int k = 5;
 
         RetanguloPalavras solver = new RetanguloPalavras(listaPalavras);
 
