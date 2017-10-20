@@ -19,16 +19,17 @@ public class RetanguloPalavras {
     private List<List<String>> palavrasPorTamanho;
 
     /**
-     * Na posicao j, armazena uma trie com todas
-     * as palavras validas de tamanho j
+     * Armazena uma trie com todas
+     * as palavras validas do arquivo,
+     * independente de tamanho
      */
-    private List<Trie> triePorTamanho;
+    private Trie triePrincipal;
 
     public RetanguloPalavras(List<String> palavrasValidas) {
         this.palavrasValidas = palavrasValidas;
+        this.triePrincipal = new Trie();
 
         this.palavrasPorTamanho = new ArrayList<>();
-        this.triePorTamanho = new ArrayList<>();
 
         // separa as palavras por tamanho
         for (String palavra : palavrasValidas) {
@@ -37,46 +38,15 @@ public class RetanguloPalavras {
                ate conter a posicao desejada */
             while (this.palavrasPorTamanho.size() <= tamanho) {
                 this.palavrasPorTamanho.add(null);
-                this.triePorTamanho.add(null);
             }
             List<String> lista = this.palavrasPorTamanho.get(tamanho);
-            Trie trie = this.triePorTamanho.get(tamanho);
             if (lista == null) {  // lazy instantiation
                 lista = new ArrayList<>();
-                trie = new Trie();
                 this.palavrasPorTamanho.set(tamanho, lista);
-                this.triePorTamanho.set(tamanho, trie);
             }
-            trie.adicionaPalavra(palavra);
+            triePrincipal.adicionaPalavra(palavra);
             lista.add(palavra);
         }
-    }
-
-    private boolean eh_prefixo(String prefixo, int tamanho_alvo) {
-//        if (tamanho_alvo >= this.palavrasPorTamanho.size()) {
-//            return false;
-//        }
-//        List<String> lista = this.palavrasPorTamanho.get(tamanho_alvo);
-//        if (lista == null) {
-//            return false;
-//        }
-//
-//        for (String palavra : lista) {
-//            if (palavra.startsWith(prefixo)) {
-//                return true;
-//            }
-//        }
-//        return false;
-
-        if (tamanho_alvo >= this.triePorTamanho.size()) {
-            return false;
-        }
-        Trie trie = this.triePorTamanho.get(tamanho_alvo);
-        if (trie == null) {
-            return false;
-        }
-
-        return trie.temPrefixo(prefixo);
     }
 
     private boolean backtrack(
@@ -103,7 +73,7 @@ public class RetanguloPalavras {
                         coluna_idx, coluna_idx + 1));
                 String prefixo = sb.toString();
 
-                if (!eh_prefixo(prefixo, tamanho)) {
+                if (!triePrincipal.temPrefixo(prefixo, tamanho)) {
                     continue for_candidatas;  // essa candidata nao serve (poda!)
                 }
             }
@@ -152,7 +122,7 @@ public class RetanguloPalavras {
     	System.out.print("Lendo arquivo...");
         List<String> listaPalavras = lerPalavras("D:/Dropbox/TEP/wordsptbr.txt");
         System.out.println("Terminado!");
-        int k = 6;
+        int k = 7;
 
         RetanguloPalavras solver = new RetanguloPalavras(listaPalavras);
 

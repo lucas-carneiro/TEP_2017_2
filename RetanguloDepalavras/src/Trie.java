@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class Trie {
 
@@ -15,17 +16,18 @@ public class Trie {
             if (noFilho == null) {
                 noFilho = noCorrente.addFilho(c);
             }
+            noFilho.tamanhosPrefixo.add(palavra.length());
             noCorrente = noFilho;
         }
         noCorrente.setTerminal(true);
     }
 
-    public boolean temPrefixo(String prefixo) {
-        TrieNode no = obterUltimoNoPrefixo(prefixo);
+    public boolean temPrefixo(String prefixo, int tamanho) {
+        TrieNode no = obterUltimoNoPrefixo(prefixo, tamanho);
         return no != null;
     }
 
-    private TrieNode obterUltimoNoPrefixo(String prefixo) {
+    private TrieNode obterUltimoNoPrefixo(String prefixo, int tamanho) {
         TrieNode noCorrente = this.raiz;
         for (char c : prefixo.toCharArray()) {
             TrieNode noFilho = noCorrente.getFilho(c);
@@ -34,11 +36,16 @@ public class Trie {
             }
             noCorrente = noFilho;
         }
-        return noCorrente;
+        if (noCorrente.tamanhosPrefixo.contains(tamanho)){
+        	return noCorrente;
+        }
+        else {
+        	return null;
+        }        	
     }
 
     public boolean temPalavra(String palavra) {
-        TrieNode no = obterUltimoNoPrefixo(palavra);
+        TrieNode no = obterUltimoNoPrefixo(palavra, palavra.length());
         return no != null && no.isTerminal();
     }
 
@@ -46,11 +53,13 @@ public class Trie {
 
         private final Character caracter;
         boolean terminal;
+        HashSet<Integer> tamanhosPrefixo;
         HashMap<Character, TrieNode> filhos;
 
         TrieNode(Character caracter) {
             this.caracter = caracter;
             this.terminal = false;
+            this.tamanhosPrefixo = new HashSet<Integer>();
             this.filhos = new HashMap<>();
         }
 
